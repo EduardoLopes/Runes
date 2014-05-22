@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="runes tests">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Runes tests</title>
+        <style>
+
+          #runes{
+            position: absolute;
+            margin: auto;
+            left: 0; right: 0; top: 0; bottom: 0;
+          }
+
+        </style>
+    </head>
+    <body>
+
+      <canvas id="runes" width="500" height="500"></canvas>
+
+        <script src="../runes.js"></script>
+        <script>
+
+        var canvas = document.getElementById('runes'),
+               ctx = canvas.getContext('2d');
+
+        var text = new Runes({
+          font: fontRunes,
+          size: 5,
+          text: "AE C D 12",
+          context: ctx,
+          x: 10,
+          y: 10
+        });
+
+        var mouse = {x: 0, y: 0}, rect;
+
+        document.addEventListener('mousemove', function (e) {
+          rect = canvas.getBoundingClientRect();
+          mouse.x = e.clientX - rect.left;
+          mouse.y = e.clientY - rect.top;
+
+          text.setPosition(mouse.x, mouse.y);
+        });
+
+        (function loop () {
+          ctx.clearRect(0,0, canvas.width, canvas.height);
+          text.render(ctx);
+          requestAnimationFrame(loop);
+        }());
+
+        </script>
+    </body>
+</html>
