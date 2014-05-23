@@ -76,18 +76,24 @@
     this.preContext = this.preCanvas.getContext('2d');
     this.done = false;
     this.containerWidth = options.containerWidth;
+    this.containerHeight = options.containerHeight;
     this.preCanvas.width = this.containerWidth;
     this.textSplit = this.text.split(' ');
+    this.width = 0;
+    this.height = 0;
+
   }
 
   Runes.prototype.render = function() {
-    this.letterIndex = 0;
-    line = 0;
-    currentLineWidth = 0;
+
 
     if(this.done === false){
-      this.preContext.clearRect(0,0,this.preCanvas.width, this.preCanvas.height);
+      this.letterIndex = 0;
+      line = 0;
+      currentLineWidth = 0;
+      this.height = 0;
 
+      this.preContext.clearRect(0,0,this.preCanvas.width, this.preCanvas.height);
       for(word in this.textSplit){
         currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (5 + 1));
         if(currentLineWidth >= this.containerWidth){
@@ -95,6 +101,8 @@
           currentLineWidth = 0;
           currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (5 + 1));
           line++;
+          this.height = Math.round((line + 1) * ((this.font[currentLetter][0].length + 2) * this.size));
+
         }
         for(letters in this.textSplit[word]){
           currentLetter = this.textSplit[word][letters];
@@ -112,8 +120,17 @@
     }
 
     this.done = true;
-
     this.context.drawImage(this.preCanvas, this.x, this.y);
+  };
+
+  Runes.prototype.setHeight = function(height) {
+    this.preCanvas.height = height;
+    this.done = false;
+  };
+
+  Runes.prototype.setWidth = function(width) {
+    this.preCanvas.width = width;
+    this.done = false;
   };
 
   Runes.prototype.setText = function (text) {
