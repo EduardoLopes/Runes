@@ -27,23 +27,23 @@
 
         var text = new Runes({
           font: fontRunes,
-          size: 3,
-          text: "AE C D 12 21 A E ",
+          size: 2,
+          text: "AAAAAAA BBBBB CCCCC DDDDD A E AECD 1221 A E EEEEEE AAAAA BBBBBB A E AECD 1221 A E AECD 1221 A E AECD 1221 A E",
           context: ctx,
-          x: 10,
-          y: 10,
+          x: 0,
+          y: 0,
           containerWidth: 500
         });
 
         var mouse = {x: 0, y: 0}, rect;
 
-        document.addEventListener('mousemove', function (e) {
-          rect = canvas.getBoundingClientRect();
-          mouse.x = e.clientX - rect.left;
-          mouse.y = e.clientY - rect.top;
+        // document.addEventListener('mousemove', function (e) {
+        //   rect = canvas.getBoundingClientRect();
+        //   mouse.x = e.clientX - rect.left;
+        //   mouse.y = e.clientY - rect.top;
 
-          text.setPosition(mouse.x, mouse.y);
-        });
+        //   text.setPosition(mouse.x, mouse.y);
+        // });
 
         (function loop () {
           ctx.clearRect(0,0, canvas.width, canvas.height);

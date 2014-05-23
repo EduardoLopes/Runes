@@ -53,7 +53,8 @@
   };
 
   var letters,
-      currentLetter;
+      currentLetter,
+      currentLineWidth = 0;
 
   /**
   * Handle the text
@@ -76,22 +77,35 @@
     this.done = false;
     this.containerWidth = options.containerWidth;
     this.preCanvas.width = this.containerWidth;
+    this.textSplit = this.text.split(' ');
   }
 
   Runes.prototype.render = function() {
     this.letterIndex = 0;
+    line = 0;
+    currentLineWidth = 0;
+
     if(this.done === false){
       this.preContext.clearRect(0,0,this.preCanvas.width, this.preCanvas.height);
-      for(letters in this.text){
-        currentLetter = this.text[letters];
-        if(typeof this.font[currentLetter] !== 'undefined'){
+
+      for(word in this.textSplit){
+        currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (5 + 1));
+        if(currentLineWidth >= this.containerWidth){
+          this.letterIndex = 0;
+          currentLineWidth = 0;
+          currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (5 + 1));
+          line++;
+        }
+        for(letters in this.textSplit[word]){
+          currentLetter = this.textSplit[word][letters];
           for (var h = this.font[currentLetter].length - 1; h >= 0; h--) {
             for (var w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
               if(this.font[currentLetter][h][w]){
-                this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.font[currentLetter].length + 1)))), Math.round((h * this.size)), this.size, this.size);
+                this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.font[currentLetter].length + 1)))), Math.round(line * ((this.font[currentLetter][h].length + 2) * this.size) + (h * this.size)), this.size, this.size);
               }
             }
           }
+          this.letterIndex++;
         }
         this.letterIndex++;
       }
@@ -104,6 +118,7 @@
 
   Runes.prototype.setText = function (text) {
     this.text = text;
+    this.textSplit = this.text.split(' ');
     this.done = false;
 
     return text;
