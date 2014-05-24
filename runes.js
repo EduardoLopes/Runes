@@ -56,7 +56,10 @@
 
   var letters,
       currentLetter,
-      currentLineWidth = 0;
+      currentLineWidth = 0,
+      line = 0,
+      word,
+      w = 0, h = 0;
 
   /**
   * Handle the text
@@ -92,6 +95,9 @@
   Runes.prototype.prepareText = function() {
     this.textSplit = this.text.split(' ');
     this.lines = [];
+    currentLineWidth = 0;
+    line = 0
+    this.height = 0;
     for(word in this.textSplit){
       currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
 
@@ -109,27 +115,27 @@
     this.setHeight(this.height);
   };
 
+  Runes.prototype.drawLetter = function(currentLetter) {
+    for (h = this.font[currentLetter].length - 1; h >= 0; h--) {
+      for (w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
+        if(this.font[currentLetter][h][w]){
+          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + 1)))), Math.round(line * ((this.fontY + 2) * this.size) + (h * this.size)), this.size, this.size);
+        }
+      }
+    }
+  };
+
   Runes.prototype.render = function() {
 
     if(this.done === false){
       this.letterIndex = 0;
-      line = 0;
-      currentLineWidth = 0;
-      this.height = 0;
-
       this.prepareText();
       for(line in this.lines){
         this.letterIndex = 0;
         for(word in this.lines[line]){
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
-            for (var h = this.font[currentLetter].length - 1; h >= 0; h--) {
-              for (var w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
-                if(this.font[currentLetter][h][w]){
-                  this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + 1)))), Math.round(line * ((this.fontY + 2) * this.size) + (h * this.size)), this.size, this.size);
-                }
-              }
-            }
+            this.drawLetter(currentLetter);
             this.letterIndex++;
           }
           this.letterIndex++;
