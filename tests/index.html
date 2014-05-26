@@ -45,6 +45,11 @@
 
         //   text.setPosition(mouse.x, mouse.y);
         // });
+        var t = new String();
+        document.addEventListener('keypress', function(e) {
+          t += String.fromCharCode(e.keyCode);
+          text.setText(t.toString());
+        });
 
         (function loop () {
           ctx.clearRect(0,0, canvas.width, canvas.height);

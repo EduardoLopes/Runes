@@ -70,7 +70,7 @@
   * @constructor
   */
   function Runes (options) {
-    this.text = options.text;
+    this.setText(options.text);
     this.size = options.size;
     this.font = options.font;
     this.fontX = this.font.x;
@@ -96,14 +96,12 @@
     this.textSplit = this.text.split(' ');
     this.lines = [];
     currentLineWidth = 0;
-    line = 0
-    this.height = 0;
+    line = 0;
     for(word in this.textSplit){
       currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
 
       if(currentLineWidth >= this.containerWidth){
-        currentLineWidth = 0;
-        currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
+        currentLineWidth = (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
         line++;
         this.height = Math.round((line + 1) * ((this.fontY + 2) * this.size));
       }
@@ -128,11 +126,14 @@
   Runes.prototype.render = function() {
 
     if(this.done === false){
-      this.letterIndex = 0;
       this.prepareText();
+
+      //each line
       for(line in this.lines){
         this.letterIndex = 0;
+        //each word of each line
         for(word in this.lines[line]){
+          //each letter of each word
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
@@ -159,8 +160,8 @@
 
   Runes.prototype.setText = function (text) {
     this.text = text;
-    this.textSplit = this.text.split(' ');
     this.done = false;
+    this.textSplit = this.text.split(' ');
 
     return text;
   };
