@@ -139,13 +139,13 @@
         //each word of each line
         for(word in this.lines[line]){
           //each letter of each word
+          this.letterIndex++;
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
             this.lastChar.x = currentLineWidth;
             this.lastChar.y = (line) * ((this.fontY + 2) * this.size);
           }
-          this.letterIndex++;
         }
       }
 
@@ -181,6 +181,7 @@
     }
 
     this.drawLetter(char);
+
   };
 
   Runes.prototype.setHeight = function(height) {
