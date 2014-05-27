@@ -89,6 +89,9 @@
     this.width = 0;
     this.height = 0;
     this.lines = [];
+    this.lastChar = {
+      x: 0, y: 0
+    }
 
   }
 
@@ -139,6 +142,8 @@
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
+            this.lastChar.x = currentLineWidth;
+            this.lastChar.y = (line) * ((this.fontY + 2) * this.size);
           }
           this.letterIndex++;
         }
@@ -159,13 +164,14 @@
     this.text += char;
 
     currentLineWidth += (this.size * (this.fontX + 1));
+    this.lastChar.x = currentLineWidth;
+    this.lastChar.y = (line) * ((this.fontY + 2) * this.size);
 
     if(currentLineWidth >= this.containerWidth){
 
       currentLineWidth = (this.size * (this.fontX + 1));
       this.addLine();
       this.setHeight(this.height);
-      console.log(this.textSplit);
       this.done = false;
     }
 

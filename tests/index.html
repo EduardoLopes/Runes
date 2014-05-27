@@ -50,10 +50,15 @@
           t = String.fromCharCode(e.keyCode);
           text.addChar(t.toString());
         });
-
+        var i = 0;
         (function loop () {
           ctx.clearRect(0,0, canvas.width, canvas.height);
+          if(i % 20 > 10){
+            ctx.fillRect(text.lastChar.x, text.lastChar.y, 2, 10);
+          }
+
           text.render(ctx);
+          i++;
           requestAnimationFrame(loop);
         }());
 
