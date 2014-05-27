@@ -3,6 +3,7 @@
   var fontRunes = {
     x: 5,
     y: 5,
+    uppercase: true,
     A: [
         [0,0,1,0,0],
         [0,1,0,1,0],
@@ -51,7 +52,7 @@
         [1,1,1,1,1],
         [1,0,0,0,0],
         [1,1,1,1,1]
-      ],
+      ]
   };
 
   var letters,
@@ -70,9 +71,9 @@
   * @constructor
   */
   function Runes (options) {
-    this.setText(options.text);
     this.size = options.size;
     this.font = options.font;
+    this.setText(options.text);
     this.fontX = this.font.x;
     this.fontY = this.font.y;
     this.context = options.context;
@@ -90,6 +91,7 @@
     this.height = 0;
     this.lineHeight = options.lineHeight || 0;
     this.letterSpacing = options.letterSpacing || 0;
+
     this.lines = [];
     this.lastChar = {
       x: 0, y: 0
@@ -163,7 +165,12 @@
   };
 
   Runes.prototype.addChar = function(char) {
-    this.text += char;
+
+    if(this.font.uppercase){
+     this.text += char;
+    } else {
+      this.text += char.toUpperCase();
+    }
 
     currentLineWidth += (this.size * (this.fontX + (1 + this.letterSpacing)));
     this.lastChar.x = currentLineWidth;
@@ -204,7 +211,12 @@
   };
 
   Runes.prototype.setText = function (text) {
-    this.text = text;
+    if(this.font.uppercase){
+      this.text = text;
+    } else {
+      this.text = text.toUpperCase();
+    }
+
     this.done = false;
     this.textSplit = this.text.split(' ');
 
