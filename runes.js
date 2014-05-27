@@ -88,6 +88,7 @@
     //this.preCanvas.height = this.containerWidth;
     this.width = 0;
     this.height = 0;
+    this.lineHeight = 0;
     this.lines = [];
     this.lastChar = {
       x: 0, y: 0
@@ -120,7 +121,7 @@
     for (h = this.font[currentLetter].length - 1; h >= 0; h--) {
       for (w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
         if(this.font[currentLetter][h][w]){
-          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + 1)))), Math.round(line * ((this.fontY + 2) * this.size) + (h * this.size)), this.size, this.size);
+          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + 1)))), Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
         }
       }
     }
@@ -144,7 +145,7 @@
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
             this.lastChar.x = currentLineWidth;
-            this.lastChar.y = (line) * ((this.fontY + 2) * this.size);
+            this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
           }
         }
       }
@@ -156,7 +157,7 @@
 
   Runes.prototype.addLine = function(){
     line++;
-    this.height = Math.round((line + 1) * ((this.fontY + 2) * this.size));
+    this.height = Math.round((line + 1) * ((this.fontY + (2 + this.lineHeight)) * this.size));
     this.letterIndex = 0;
   };
 
@@ -165,7 +166,7 @@
 
     currentLineWidth += (this.size * (this.fontX + 1));
     this.lastChar.x = currentLineWidth;
-    this.lastChar.y = (line) * ((this.fontY + 2) * this.size);
+    this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
 
     if(currentLineWidth >= this.containerWidth){
 
@@ -207,6 +208,14 @@
     this.textSplit = this.text.split(' ');
 
     return text;
+  };
+
+  Runes.prototype.setLineHeight = function(lineHeight) {
+
+    this.lineHeight = lineHeight;
+    this.done = false;
+
+    return lineHeight;
   };
 
   Runes.prototype.setSize = function (size) {
