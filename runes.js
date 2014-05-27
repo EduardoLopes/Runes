@@ -88,7 +88,8 @@
     //this.preCanvas.height = this.containerWidth;
     this.width = 0;
     this.height = 0;
-    this.lineHeight = 0;
+    this.lineHeight = options.lineHeight || 0;
+    this.letterSpacing = options.letterSpacing || 0;
     this.lines = [];
     this.lastChar = {
       x: 0, y: 0
@@ -102,10 +103,10 @@
     currentLineWidth = 0;
     line = 0;
     for(word in this.textSplit){
-      currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
+      currentLineWidth += (this.textSplit[word].length + 1) * (this.size * (this.fontX + (1 + this.letterSpacing)));
 
       if(currentLineWidth >= this.containerWidth){
-        currentLineWidth = (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
+        currentLineWidth = (this.textSplit[word].length + 1) * (this.size * (this.fontX + (1 + this.letterSpacing)));
         this.addLine();
       }
 
@@ -121,7 +122,7 @@
     for (h = this.font[currentLetter].length - 1; h >= 0; h--) {
       for (w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
         if(this.font[currentLetter][h][w]){
-          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + 1)))), Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
+          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * (this.size * (this.fontX + (1 + this.letterSpacing))))), Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
         }
       }
     }
@@ -164,13 +165,13 @@
   Runes.prototype.addChar = function(char) {
     this.text += char;
 
-    currentLineWidth += (this.size * (this.fontX + 1));
+    currentLineWidth += (this.size * (this.fontX + (1 + this.letterSpacing)));
     this.lastChar.x = currentLineWidth;
     this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
 
     if(currentLineWidth >= this.containerWidth){
 
-      currentLineWidth = (this.size * (this.fontX + 1));
+      currentLineWidth = (this.size * (this.fontX + (1 + this.letterSpacing)));
       this.addLine();
       this.setHeight(this.height);
       this.done = false;
@@ -216,6 +217,14 @@
     this.done = false;
 
     return lineHeight;
+  };
+
+  Runes.prototype.setLetterSpacing = function(letterSpacing) {
+
+    this.letterSpacing = letterSpacing;
+    this.done = false;
+
+    return letterSpacing;
   };
 
   Runes.prototype.setSize = function (size) {
