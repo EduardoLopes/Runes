@@ -102,9 +102,9 @@
 
       if(currentLineWidth >= this.containerWidth){
         currentLineWidth = (this.textSplit[word].length + 1) * (this.size * (this.fontX + 1));
-        line++;
-        this.height = Math.round((line + 1) * ((this.fontY + 2) * this.size));
+        this.addLine();
       }
+
       if(typeof this.lines[line] === 'undefined'){
         this.lines[line] = [];
       }
@@ -121,6 +121,8 @@
         }
       }
     }
+
+    this.letterIndex++;
   };
 
   Runes.prototype.render = function() {
@@ -137,7 +139,6 @@
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
-            this.letterIndex++;
           }
           this.letterIndex++;
         }
@@ -145,8 +146,35 @@
 
       this.done = true;
     }
-
     this.context.drawImage(this.preCanvas, this.x, this.y);
+  };
+
+  Runes.prototype.addLine = function(){
+    line++;
+    this.height = Math.round((line + 1) * ((this.fontY + 2) * this.size));
+    this.letterIndex = 0;
+  };
+
+  Runes.prototype.addChar = function(char) {
+    this.text += char;
+
+    currentLineWidth += (this.size * (this.fontX + 1));
+
+    if(currentLineWidth >= this.containerWidth){
+
+      currentLineWidth = (this.size * (this.fontX + 1));
+      this.addLine();
+      this.setHeight(this.height);
+      console.log(this.textSplit);
+      this.done = false;
+    }
+
+    if(char === ' '){
+      this.letterIndex++;
+      return false;
+    }
+
+    this.drawLetter(char);
   };
 
   Runes.prototype.setHeight = function(height) {

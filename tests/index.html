@@ -47,8 +47,8 @@
         // });
         var t = new String();
         document.addEventListener('keypress', function(e) {
-          t += String.fromCharCode(e.keyCode);
-          text.setText(t.toString());
+          t = String.fromCharCode(e.keyCode);
+          text.addChar(t.toString());
         });
 
         (function loop () {
