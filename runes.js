@@ -184,6 +184,14 @@
 
   };
 
+  Runes.prototype.getCharWidth = function() {
+    return this.fontX * this.size;
+  };
+
+  Runes.prototype.getCharHeight = function() {
+    return this.fontY * this.size;
+  };
+
   Runes.prototype.setHeight = function(height) {
     this.preCanvas.height = height;
   };

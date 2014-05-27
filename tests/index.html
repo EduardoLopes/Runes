@@ -54,7 +54,7 @@
         (function loop () {
           ctx.clearRect(0,0, canvas.width, canvas.height);
           if(i % 20 > 10){
-            ctx.fillRect(text.lastChar.x, text.lastChar.y, 2, 10);
+            ctx.fillRect(text.lastChar.x, text.lastChar.y, text.getCharWidth() / 2, text.getCharHeight());
           }
 
           text.render(ctx);
