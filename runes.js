@@ -167,9 +167,9 @@
   Runes.prototype.addChar = function(char) {
 
     if(this.font.uppercase){
-     this.text += char;
-    } else {
       this.text += char.toUpperCase();
+    } else {
+      this.text += char;
     }
 
     currentLineWidth += (this.size * (this.fontX + (1 + this.letterSpacing)));
@@ -188,8 +188,12 @@
       this.letterIndex++;
       return false;
     }
+    if(this.font.uppercase){
+      this.drawLetter(char.toUpperCase());
+    } else {
+      this.drawLetter(char);
+    }
 
-    this.drawLetter(char);
 
   };
 
@@ -212,13 +216,13 @@
 
   Runes.prototype.setText = function (text) {
     if(this.font.uppercase){
-      this.text = text;
+      this.text = text.toString().toUpperCase();
     } else {
-      this.text = text.toUpperCase();
+      this.text = text.toString();
     }
 
+    console.log(this.text);
     this.done = false;
-    this.textSplit = this.text.split(' ');
 
     return text;
   };
