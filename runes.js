@@ -356,6 +356,7 @@
       }
       this.lines[line].push(this.textSplit[word]);
     }
+    this.height = Math.round((line + 1) * ((this.fontY + (2 + this.lineHeight)) * this.size));
     this.setHeight(this.height);
   };
 
@@ -379,6 +380,7 @@
       //each line
       for(line in this.lines){
         this.letterIndex = 0;
+
         //each word of each line
         for(word in this.lines[line]){
           //each letter of each word
@@ -399,7 +401,6 @@
 
   Runes.prototype.addLine = function(){
     line++;
-    this.height = Math.round((line + 1) * ((this.fontY + (2 + this.lineHeight)) * this.size));
     this.letterIndex = 0;
   };
 
