@@ -384,7 +384,9 @@
         //each word of each line
         for(word in this.lines[line]){
           //each letter of each word
-          this.letterIndex++;
+          if(word > 0){
+            this.letterIndex++;
+          }
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
@@ -407,14 +409,14 @@
   Runes.prototype.addChar = function(char) {
 
     if(this.font.uppercase){
-      this.text += char.toUpperCase();
+      char = char.toString().toUpperCase();
     } else {
-      this.text += char;
+      char = char.toString();
     }
 
+    this.text += char;
+
     currentLineWidth += (this.size * (this.fontX + (1 + this.letterSpacing)));
-    this.lastChar.x = currentLineWidth;
-    this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
 
     if(currentLineWidth >= this.containerWidth){
 
@@ -424,17 +426,15 @@
       this.done = false;
     }
 
+    this.lastChar.x = currentLineWidth;
+    this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
+
     if(char === ' '){
       this.letterIndex++;
       return false;
     }
-    if(this.font.uppercase){
-      this.drawLetter(char.toUpperCase());
-    } else {
-      this.drawLetter(char);
-    }
 
-
+    this.drawLetter(char);
   };
 
   Runes.prototype.getCharWidth = function() {
@@ -461,7 +461,6 @@
       this.text = text.toString();
     }
 
-    console.log(this.text);
     this.done = false;
 
     return text;

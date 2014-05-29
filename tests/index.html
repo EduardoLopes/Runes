@@ -28,7 +28,7 @@
         var text = new Runes({
           font: fontRunes,
           size: 2,
-          text: "a b c d e f g h i j k l m n o p q r s t u v w x y z.,?!",
+          text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
           context: ctx,
           x: 0,
           y: 0,
@@ -46,6 +46,7 @@
         //   text.setPosition(mouse.x, mouse.y);
         // });
         var t = new String();
+        var size = 0;
         document.addEventListener('keypress', function(e) {
           t = String.fromCharCode(e.keyCode);
           text.addChar(t.toString());
@@ -54,7 +55,7 @@
         (function loop () {
           ctx.clearRect(0,0, canvas.width, canvas.height);
           if(i % 20 > 10){
-            ctx.fillRect(text.lastChar.x, text.lastChar.y, text.getCharWidth() / 2, text.getCharHeight());
+            ctx.fillRect(text.lastChar.x, text.lastChar.y, text.getCharWidth(), text.getCharHeight());
           }
 
           text.render(ctx);
