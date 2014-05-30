@@ -397,7 +397,7 @@
         for(word in this.lines[line]){
           //each letter of each word
           if(word > 0){
-            widthLetters += this.getCharWidth(currentLetter);
+            widthLetters += this.getCharWidth(' ');
           }
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
@@ -441,7 +441,7 @@
     }
 
     if(char === ' '){
-      widthLetters += this.getCharWidth(currentLetter);
+      widthLetters += this.getCharWidth(' ');
       return false;
     }
 
