@@ -299,7 +299,8 @@
       currentLineWidth = 0,
       line = 0,
       word,
-      w = 0, h = 0;
+      w = 0, h = 0,
+      wordLength = 0;
 
   /**
   * Handle the text
@@ -344,13 +345,21 @@
     this.lines = [];
     currentLineWidth = 0;
     line = 0;
-    for(word in this.textSplit){
-      currentLineWidth += (this.textSplit[word].length + 1) * this.getCharWidth('0');
 
-      if(currentLineWidth >= this.containerWidth){
-        currentLineWidth = (this.textSplit[word].length + 1) * this.getCharWidth('0');
-        this.addLine();
-      }
+    for(word in this.textSplit){
+      wordLength = 0;
+
+      for (letters = 0; letters < this.textSplit[word].length + 1; letters++) {
+
+        if(currentLineWidth >= this.containerWidth){
+          this.addLine();
+          currentLineWidth = wordLength;
+        }
+
+        currentLineWidth += this.getCharWidth(this.textSplit[word][letters] || ' ');
+        wordLength += this.getCharWidth(this.textSplit[word][letters] || ' ');
+
+      };
 
       if(typeof this.lines[line] === 'undefined'){
         this.lines[line] = [];
