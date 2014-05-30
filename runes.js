@@ -61,39 +61,32 @@
         [1,0,0,0,1]
       ],
     I: [
-        [0,1,1,1,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,1,1,1,0]
+        [1,1,1],
+        [0,1,0],
+        [0,1,0],
+        [0,1,0],
+        [1,1,1]
       ],
     J: [
-        [0,0,0,0,1],
-        [0,0,0,0,1],
-        [0,0,0,0,1],
-        [0,1,0,0,1],
-        [0,0,1,1,0]
+        [0,0,0,1],
+        [0,0,0,1],
+        [0,0,0,1],
+        [1,0,0,1],
+        [0,1,1,0]
       ],
     K: [
-        [1,0,0,1,0],
-        [1,0,1,0,0],
-        [1,1,0,0,0],
-        [1,0,1,0,0],
-        [1,0,0,1,0]
+        [1,0,0,1],
+        [1,0,1,0],
+        [1,1,0,0],
+        [1,0,1,0],
+        [1,0,0,1]
       ],
     L: [
-        [1,0,0,0,0],
-        [1,0,0,0,0],
-        [1,0,0,0,0],
-        [1,0,0,0,0],
-        [1,1,1,1,0]
-      ],
-    M: [
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0]
+        [1,0,0,0],
+        [1,0,0,0],
+        [1,0,0,0],
+        [1,0,0,0],
+        [1,1,1,1]
       ],
     M: [
         [1,0,0,0,1],
@@ -201,11 +194,11 @@
         [0,1,1,1,0]
       ],
     '1': [
-        [0,0,1,0,0],
-        [0,1,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,1,1,1,0]
+        [0,1,0],
+        [1,1,0],
+        [0,1,0],
+        [0,1,0],
+        [1,1,1]
       ],
     '2': [
         [1,1,1,1,0],
@@ -264,26 +257,26 @@
         [0,1,1,1,0]
       ],
     '.': [
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [1,0,0,0,0]
+        [0],
+        [0],
+        [0],
+        [0],
+        [1]
       ],
     ',': [
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,0,0,0,0],
-        [0,1,0,0,0],
-        [1,0,0,0,0]
+        [0,0],
+        [0,0],
+        [0,0],
+        [0,0],
+        [0,1],
+        [1,0]
       ],
     '!': [
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,1,0,0],
-        [0,0,0,0,0],
-        [0,0,1,0,0],
+        [1],
+        [1],
+        [1],
+        [0],
+        [1],
       ],
     '?': [
         [0,1,1,1,0],
@@ -300,7 +293,9 @@
       line = 0,
       word,
       w = 0, h = 0,
-      wordLength = 0;
+      wordLength = 0,
+      x = 0,
+      widthLetters = 0;;
 
   /**
   * Handle the text
@@ -329,7 +324,7 @@
     //this.preCanvas.height = this.containerWidth;
     this.width = 0;
     this.height = 0;
-    this.lineHeight = options.lineHeight || 0;
+    this.lineHeight = options.lineHeight || 2;
     this.letterSpacing = options.letterSpacing || 0;
 
     this.lines = [];
@@ -373,8 +368,14 @@
   Runes.prototype.drawLetter = function(currentLetter) {
     for (h = this.font[currentLetter].length - 1; h >= 0; h--) {
       for (w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
+        if(w === 0 & h === 0){
+            x = widthLetters;
+            widthLetters += this.getCharWidth(currentLetter);
+          } else {
+            x = Math.round((w * this.size) + widthLetters);
+          }
         if(this.font[currentLetter][h][w]){
-          this.preContext.fillRect(Math.round((w * this.size) + (this.letterIndex * this.getCharWidth(currentLetter))), Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
+          this.preContext.fillRect(x, Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
         }
       }
     }
@@ -390,12 +391,13 @@
       //each line
       for(line in this.lines){
         this.letterIndex = 0;
+        widthLetters = 0;
 
         //each word of each line
         for(word in this.lines[line]){
           //each letter of each word
           if(word > 0){
-            this.letterIndex++;
+            widthLetters += this.getCharWidth(currentLetter);
           }
           for(letters in this.lines[line][word]){
             currentLetter = this.lines[line][word][letters];
@@ -439,7 +441,7 @@
     }
 
     if(char === ' '){
-      this.letterIndex++;
+      widthLetters += this.getCharWidth(currentLetter);
       return false;
     }
 
