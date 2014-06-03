@@ -1,9 +1,8 @@
 (function(global, undefined) {
 
   var fontRunes = {
-    x: 5,
-    y: 5,
     uppercase: true,
+    chars: 'ABCDEFGHIJKLMNOPQRSTUWXYZÇ.,!?',
     A: [
         [0,0,1,0,0],
         [0,1,0,1,0],
@@ -318,8 +317,6 @@
     this.size = options.size;
     this.font = options.font;
     this.setText(options.text);
-    this.fontX = this.font.x;
-    this.fontY = this.font.y;
     this.context = options.context;
     this.letterIndex = 0;
     this.x = options.x;
@@ -328,9 +325,7 @@
     this.preContext = this.preCanvas.getContext('2d');
     this.done = false;
     this.containerWidth = options.containerWidth;
-    this.containerHeight = options.containerHeight;
     this.preCanvas.width = this.containerWidth;
-    //this.preCanvas.height = this.containerWidth;
     this.width = 0;
     this.height = 0;
     this.lineHeight = options.lineHeight || 2;
@@ -341,8 +336,34 @@
       x: 0, y: 0
     }
     this.whitespaceSize = 5;
+    this.font.commonLength = this.commonArrayLength();
 
   }
+
+  var commonLength = {x: [], y: []},
+        mostCommon = {x: [], y: []},
+        length;
+  Runes.prototype.commonArrayLength = function(){
+
+    for(letter in this.font.chars){
+      letter = this.font.chars[letter];
+      commonLength.y[this.getCharLengthY(letter)] = commonLength.y[this.getCharLengthY(letter)] + 1 || 0;
+      commonLength.x[this.getCharLengthY(letter)] = commonLength.x[this.getCharLengthY(letter)] + 1 || 0;
+    }
+
+    for(length in commonLength.x){
+      mostCommon.x.push(commonLength.x[length]);
+    }
+
+    for(length in commonLength.y){
+      mostCommon.y.push(commonLength.y[length]);
+    }
+
+    return {
+      y: commonLength.y.indexOf(Math.max.apply(null, mostCommon.y)),
+      x: commonLength.x.indexOf(Math.max.apply(null, mostCommon.x))
+    };
+  };
 
   Runes.prototype.prepareText = function() {
     this.textSplit = this.text.split(' ');
@@ -370,7 +391,7 @@
       }
       this.lines[line].push(this.textSplit[word]);
     }
-    this.height = Math.round((line + 1) * ((this.fontY + (2 + this.lineHeight)) * this.size));
+    this.height = Math.round((line + 1) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size));
     this.setHeight(this.height);
   };
 
@@ -384,7 +405,7 @@
             x = Math.round((w * this.size) + widthLetters);
           }
         if(this.font[currentLetter][h][w]){
-          this.preContext.fillRect(x, Math.round((line) * ((this.fontY + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
+          this.preContext.fillRect(x, Math.round((line) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
         }
       }
     }
@@ -439,7 +460,7 @@
     this.text += char;
 
     this.lastChar.x = currentLineWidth;
-    this.lastChar.y = (line) * ((this.getCharLengthY('A') + (2 + this.lineHeight)) * this.size);
+    this.lastChar.y = (line) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size);
 
     currentLineWidth += this.getCharWidth(char);
 
