@@ -186,6 +186,15 @@
         [0,1,0,0,0],
         [1,1,1,1,1]
       ],
+    Ç: [
+        [0,1,1,1,0],
+        [1,0,0,0,1],
+        [1,0,0,0,0],
+        [1,0,0,0,1],
+        [0,1,1,1,0],
+        [0,0,1,0,0],
+        [0,1,0,0,0]
+      ],
     '0': [
         [0,1,1,1,0],
         [1,0,0,1,1],
@@ -366,8 +375,8 @@
   };
 
   Runes.prototype.drawLetter = function(currentLetter) {
-    for (h = this.font[currentLetter].length - 1; h >= 0; h--) {
-      for (w = this.font[currentLetter][h].length - 1; w >= 0; w--) {
+    for (h = this.getCharLengthY(currentLetter) - 1; h >= 0; h--) {
+      for (w = this.getCharLengthX(currentLetter) - 1; w >= 0; w--) {
         if(w === 0 & h === 0){
             x = widthLetters;
             widthLetters += this.getCharWidth(currentLetter);
@@ -403,7 +412,8 @@
             currentLetter = this.lines[line][word][letters];
             this.drawLetter(currentLetter);
             this.lastChar.x = currentLineWidth - 12;
-            this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
+             this.lastChar.y = (line) * ((this.getCharLengthY(currentLetter) + (2 + this.lineHeight)) * this.size);
+
           }
         }
       }
@@ -429,7 +439,7 @@
     this.text += char;
 
     this.lastChar.x = currentLineWidth;
-    this.lastChar.y = (line) * ((this.fontY + (2 + this.lineHeight)) * this.size);
+    this.lastChar.y = (line) * ((this.getCharLengthY('A') + (2 + this.lineHeight)) * this.size);
 
     currentLineWidth += this.getCharWidth(char);
 
@@ -452,8 +462,8 @@
     return (this.size * (this.getCharLengthX(letter) + (1 + this.letterSpacing)));
   };
 
-  Runes.prototype.getCharHeight = function() {
-    return (this.size * (this.fontY + (1 + this.letterSpacing)));
+  Runes.prototype.getCharHeight = function(letter) {
+    return (this.size * (this.getCharLengthY(letter) + (1 + this.lineHeight)));
   };
 
   Runes.prototype.getCharLengthX = function(letter) {
@@ -467,6 +477,19 @@
     }
 
     return this.font[letter][0].length;
+  };
+
+  Runes.prototype.getCharLengthY = function(letter) {
+    if(letter === ' ' || typeof letter === 'undefined'){
+      return this.whitespaceSize;
+    }
+    if(this.font.uppercase){
+      letter = letter.toString().toUpperCase();
+    } else {
+      letter = letter.toString();
+    }
+
+    return this.font[letter].length;
   };
 
   Runes.prototype.setHeight = function(height) {
