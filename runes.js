@@ -363,6 +363,7 @@
       y: commonLength.y.indexOf(Math.max.apply(null, mostCommon.y)),
       x: commonLength.x.indexOf(Math.max.apply(null, mostCommon.x))
     };
+
   };
 
   Runes.prototype.prepareText = function() {
@@ -451,11 +452,7 @@
 
   Runes.prototype.addChar = function(char) {
 
-    if(this.font.uppercase){
-      char = char.toString().toUpperCase();
-    } else {
-      char = char.toString();
-    }
+    char = this.font.uppercase ? char.toString().toUpperCase() : char.toString();
 
     this.text += char;
 
@@ -491,11 +488,8 @@
     if(letter === ' '){
       return this.whitespaceSize;
     }
-    if(this.font.uppercase){
-      letter = letter.toString().toUpperCase();
-    } else {
-      letter = letter.toString();
-    }
+
+    letter = this.font.uppercase ? letter.toString().toUpperCase() : letter.toString();
 
     return this.font[letter][0].length;
   };
@@ -504,11 +498,8 @@
     if(letter === ' ' || typeof letter === 'undefined'){
       return this.whitespaceSize;
     }
-    if(this.font.uppercase){
-      letter = letter.toString().toUpperCase();
-    } else {
-      letter = letter.toString();
-    }
+
+    letter = this.font.uppercase ? letter.toString().toUpperCase() : letter.toString();
 
     return this.font[letter].length;
   };
@@ -523,12 +514,8 @@
   };
 
   Runes.prototype.setText = function (text) {
-    if(this.font.uppercase){
-      this.text = text.toString().toUpperCase();
-    } else {
-      this.text = text.toString();
-    }
 
+    this.text = this.font.uppercase ? text.toString().toUpperCase() : text.toString();
     this.done = false;
 
     return text;
