@@ -347,8 +347,8 @@
 
     for(letter in this.font.chars){
       letter = this.font.chars[letter];
+      commonLength.x[this.getCharLengthX(letter)] = commonLength.x[this.getCharLengthX(letter)] + 1 || 0;
       commonLength.y[this.getCharLengthY(letter)] = commonLength.y[this.getCharLengthY(letter)] + 1 || 0;
-      commonLength.x[this.getCharLengthY(letter)] = commonLength.x[this.getCharLengthY(letter)] + 1 || 0;
     }
 
     for(length in commonLength.x){
