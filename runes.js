@@ -303,15 +303,15 @@
   * @global
   * @constructor
   */
-  function Runes (options) {
+  function Runes ( options ) {
     this.size = options.size;
     this.font = options.font;
-    this.setText(options.text);
+    this.setText( options.text );
     this.context = options.context;
     this.x = options.x;
     this.y = options.y;
-    this.preCanvas = document.createElement('canvas');
-    this.preContext = this.preCanvas.getContext('2d');
+    this.preCanvas = document.createElement( 'canvas' );
+    this.preContext = this.preCanvas.getContext( '2d' );
     this.done = false;
     this.containerWidth = options.containerWidth;
     this.preCanvas.width = this.containerWidth;
@@ -331,29 +331,29 @@
     this.font.commonLength = this.commonArrayLength();
   }
 
-  Runes.prototype.commonArrayLength = function(){
+  Runes.prototype.commonArrayLength = function() {
     var commonLength = {x: [], y: []},
         mostCommon = {x: [], y: []},
         letter,
         i = 0;
 
-    for(i = this.font.chars.length - 1; i >= 0; i-- ){
+    for( i = this.font.chars.length - 1; i >= 0; i-- ) {
       letter = this.font.chars[i];
       commonLength.x[this.getCharLengthX(letter)] = commonLength.x[this.getCharLengthX(letter)] + 1 || 0;
       commonLength.y[this.getCharLengthY(letter)] = commonLength.y[this.getCharLengthY(letter)] + 1 || 0;
     }
 
-    for(length in commonLength.x){
-      mostCommon.x.push(commonLength.x[length]);
+    for( length in commonLength.x ){
+      mostCommon.x.push( commonLength.x[length] );
     }
 
-    for(length in commonLength.y){
-      mostCommon.y.push(commonLength.y[length]);
+    for( length in commonLength.y ){
+      mostCommon.y.push( commonLength.y[length] );
     }
 
     return {
-      x: commonLength.x.indexOf(Math.max.apply(Math, mostCommon.x)),
-      y: commonLength.y.indexOf(Math.max.apply(Math, mostCommon.y))
+      x: commonLength.x.indexOf( Math.max.apply( Math, mostCommon.x ) ),
+      y: commonLength.y.indexOf( Math.max.apply( Math, mostCommon.y ) )
     };
 
   };
@@ -363,47 +363,49 @@
         word,
         wordLength,
         line = 0;
-    this.textSplit = this.text.split(' ');
+
+    this.textSplit = this.text.split( ' ' );
     this.lines = [];
 
-    for(word in this.textSplit){
+    for( word in this.textSplit ){
       wordLength = 0;
 
-      for (letters = 0; letters < this.textSplit[word].length + 1; letters++) {
+      for ( letters = 0; letters < this.textSplit[ word ].length + 1; letters++ ) {
 
-        if(this.currentLineWidth >= this.containerWidth){
+        if( this.currentLineWidth >= this.containerWidth ){
           line++;
           this.currentLineWidth = wordLength;
         }
 
-        this.currentLineWidth += this.getCharWidth(this.textSplit[word][letters] || ' ');
-        wordLength += this.getCharWidth(this.textSplit[word][letters] || ' ');
+        this.currentLineWidth += this.getCharWidth( this.textSplit[ word ][ letters ] || ' ' );
+        wordLength += this.getCharWidth( this.textSplit[ word ][ letters ] || ' ' );
 
       };
 
-      if(typeof this.lines[line] === 'undefined'){
-        this.lines[line] = [];
+      if( typeof this.lines[ line ] === 'undefined' ){
+        this.lines[ line ] = [];
       }
-      this.lines[line].push(this.textSplit[word]);
+
+      this.lines[ line ].push( this.textSplit[ word ] );
     }
-    this.height = Math.round((line + 1) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size));
-    this.setHeight(this.height);
+    this.height = Math.round( ( line + 1 ) * ( (this.font.commonLength.y + ( 2 + this.lineHeight ) ) * this.size ) );
+    this.setHeight( this.height );
   };
 
-  Runes.prototype.drawLetter = function(currentLetter, line) {
+  Runes.prototype.drawLetter = function( currentLetter ) {
 
     var w = h = x = 0;
 
-    for (h = this.getCharLengthY(currentLetter) - 1; h >= 0; h--) {
-      for (w = this.getCharLengthX(currentLetter) - 1; w >= 0; w--) {
-        if(w === 0 & h === 0){
+    for ( h = this.getCharLengthY( currentLetter ) - 1; h >= 0; h-- ) {
+      for ( w = this.getCharLengthX( currentLetter ) - 1; w >= 0; w-- ) {
+        if( w === 0 & h === 0 ){
             x = this.widthLetters;
-            this.widthLetters += this.getCharWidth(currentLetter);
+            this.widthLetters += this.getCharWidth( currentLetter );
           } else {
-            x = Math.round((w * this.size) + this.widthLetters);
+            x = Math.round( ( w * this.size ) + this.widthLetters );
           }
-        if(this.font[currentLetter][h][w]){
-          this.preContext.fillRect(x, Math.round((line) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size) + (h * this.size)), this.size, this.size);
+        if(this.font[ currentLetter ][ h ][ w ]){
+          this.preContext.fillRect( x, Math.round( ( this.line ) * ( ( this.font.commonLength.y + ( 2 + this.lineHeight ) ) * this.size ) + ( h * this.size ) ), this.size, this.size);
         }
       }
     }
@@ -411,7 +413,7 @@
 
   Runes.prototype.render = function() {
 
-    if(this.done === false){
+    if( this.done === false ){
       var currentLetter,
           line,
           word;
@@ -419,98 +421,91 @@
       this.prepareText();
 
       //each line
-      for(line in this.lines){
+      for( line in this.lines ){
         this.widthLetters = 0;
         this.line = line;
-
         //each word of each line
-        for(word in this.lines[line]){
+        for( word in this.lines[ line ] ){
+          this.widthLetters += word > 0 ? this.getCharWidth( ' ' ) : 0;
           //each letter of each word
-          if(word > 0){
-            this.widthLetters += this.getCharWidth(' ');
-          }
-          for(letters in this.lines[line][word]){
-            currentLetter = this.lines[line][word][letters];
-            this.drawLetter(currentLetter, line);
+          for( letters in this.lines[ line ][ word ] ){
+            currentLetter = this.lines[ line ][ word ][ letters ];
+            this.drawLetter( currentLetter );
             this.lastChar.x = this.currentLineWidth - 12;
-            this.lastChar.y = (line) * ((this.getCharLengthY(currentLetter) + (2 + this.lineHeight)) * this.size);
-
+            this.lastChar.y = ( this.line ) * ( ( this.getCharLengthY( currentLetter ) + ( 2 + this.lineHeight ) ) * this.size );
           }
         }
       }
-
       this.done = true;
     }
-    this.context.drawImage(this.preCanvas, this.x, this.y);
+
+    this.context.drawImage( this.preCanvas, this.x, this.y );
   };
 
-  Runes.prototype.addLine = function(){
+  Runes.prototype.addLine = function() {
     this.line++;
   };
 
-  Runes.prototype.addChar = function(char) {
-
+  Runes.prototype.addChar = function( char ) {
     char = this.font.uppercase ? char.toString().toUpperCase() : char.toString();
-
     this.text += char;
     this.lastChar.x = this.currentLineWidth;
-    this.lastChar.y = (this.line) * ((this.font.commonLength.y + (2 + this.lineHeight)) * this.size);
+    this.lastChar.y = ( this.line ) * ( ( this.font.commonLength.y + ( 2 + this.lineHeight ) ) * this.size );
+    this.currentLineWidth += this.getCharWidth( char );
 
-    this.currentLineWidth += this.getCharWidth(char);
-
-    if(this.currentLineWidth >= this.containerWidth){
-      this.currentLineWidth = this.getCharWidth(char);
+    if( this.currentLineWidth >= this.containerWidth ){
+      this.currentLineWidth = this.getCharWidth( char );
       this.addLine();
-      this.setHeight(this.height);
+      this.setHeight( this.height );
       this.done = false;
     }
 
     if(char === ' '){
-      this.widthLetters += this.getCharWidth(' ');
+      this.widthLetters += this.getCharWidth( ' ' );
       return false;
     }
 
-    this.drawLetter(char, this.line);
+    this.drawLetter( char );
   };
 
-  Runes.prototype.getCharWidth = function(letter) {
-    return (this.size * (this.getCharLengthX(letter) + (1 + this.letterSpacing)));
+  Runes.prototype.getCharWidth = function( letter ) {
+    return ( this.size * ( this.getCharLengthX( letter ) + ( 1 + this.letterSpacing ) ) );
   };
 
-  Runes.prototype.getCharHeight = function(letter) {
-    return (this.size * (this.getCharLengthY(letter) + (1 + this.lineHeight)));
+  Runes.prototype.getCharHeight = function( letter ) {
+    return ( this.size * ( this.getCharLengthY( letter ) + ( 1 + this.lineHeight ) ) );
   };
 
-  Runes.prototype.getCharLengthX = function(letter) {
-    if(letter === ' '){
+  Runes.prototype.getCharLengthX = function( letter ) {
+    if( letter === ' ' ){
       return this.whitespaceSize;
     }
 
     letter = this.font.uppercase ? letter.toString().toUpperCase() : letter.toString();
 
-    return this.font[letter][0].length;
+    return this.font[ letter ][0].length;
   };
 
-  Runes.prototype.getCharLengthY = function(letter) {
-    if(letter === ' ' || typeof letter === 'undefined'){
+  Runes.prototype.getCharLengthY = function( letter ) {
+    if( letter === ' ' || typeof letter === 'undefined' ){
       return this.whitespaceSize;
     }
 
     letter = this.font.uppercase ? letter.toString().toUpperCase() : letter.toString();
 
-    return this.font[letter].length;
+    return this.font[ letter ].length;
   };
 
-  Runes.prototype.setHeight = function(height) {
+  Runes.prototype.setHeight = function( height ) {
     this.preCanvas.height = height;
   };
 
-  Runes.prototype.setWidth = function(width) {
+  Runes.prototype.setWidth = function( width ) {
     this.preCanvas.width = width;
     this.done = false;
   };
 
-  Runes.prototype.setText = function (text) {
+  Runes.prototype.setText = function ( text ) {
 
     this.text = this.font.uppercase ? text.toString().toUpperCase() : text.toString();
     this.done = false;
@@ -518,7 +513,7 @@
     return text;
   };
 
-  Runes.prototype.setLineHeight = function(lineHeight) {
+  Runes.prototype.setLineHeight = function( lineHeight ) {
 
     this.lineHeight = lineHeight;
     this.done = false;
@@ -526,7 +521,7 @@
     return lineHeight;
   };
 
-  Runes.prototype.setLetterSpacing = function(letterSpacing) {
+  Runes.prototype.setLetterSpacing = function( letterSpacing ) {
 
     this.letterSpacing = letterSpacing;
     this.done = false;
@@ -534,13 +529,15 @@
     return letterSpacing;
   };
 
-  Runes.prototype.setSize = function (size) {
-    this.size = Math.round(size);
+  Runes.prototype.setSize = function ( size ) {
+
+    this.size = Math.round( size );
     this.done = false;
+
     return size;
   };
 
-  Runes.prototype.setPosition = function(x, y) {
+  Runes.prototype.setPosition = function( x, y ) {
     this.x = x;
     this.y = y;
   };
