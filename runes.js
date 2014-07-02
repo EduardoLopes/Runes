@@ -494,23 +494,29 @@
           //loop
           line,
           //loop
-          word;
+          word,
+          //lines length
+          linesLength,
+          //words length of a line
+          wordsLength,
+          //letter length of a word
+          lettersLength;
 
       //prepare the text to be draw
       this.prepareText();
 
       //goes through each line
-      for( line in this.lines ){
-        //beggining of the line each new line
+      for (line = 0, linesLength = this.lines.length; line < linesLength; line++) {
+        //the 'pointer' go back to the beginning of the line each new line
         this.nextCharCoordinate = 0;
         //get the number of line
         this.line = +line;
         //goes through each word of each line
-        for( word in this.lines[ line ] ){
+        for (word = 0, wordsLength = this.lines[ line ].length; word < wordsLength; word++) {
           //add a whitespace before each word of the line, but not the fist one
           this.nextCharCoordinate += word > 0 ? this.getCharWidth( ' ' ) : 0;
           //goes through each letter of each word
-          for( letters in this.lines[ line ][ word ] ){
+          for (letters = 0, lettersLength = this.lines[ line ][ word ].length; letters < lettersLength; letters++) {
             currentLetter = this.lines[ line ][ word ][ letters ];
             //draw each word
             this.drawLetter( currentLetter );
